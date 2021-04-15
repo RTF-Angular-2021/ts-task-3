@@ -22,11 +22,3 @@ function check_mail(target: object, propertyKey: string | symbol): any{
     }
 }
 
-class Example{
-    @check_mail
-    public email: string = "";
-}
-
-let exampleInstance = new Example();
-exampleInstance.email = "fkkldfjg"; // генерирует эксепшен
-exampleInstance.email = "misha@mail.ru"; // выводит в консоль e-mail valid

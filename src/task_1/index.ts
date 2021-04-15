@@ -26,3 +26,19 @@ class Calculator {
         return (this.a + this.b).toString();
     }
 }
+
+class DecorateRu extends Calculator
+{
+    public exec(): string
+    {
+        return 'Результат сложения ${this.a} + ${this.b} = ${super.exec()}'
+    }
+}
+
+class DecorateEn extends Calculator
+{
+    public exec(): string
+    {
+        return 'Result of the addition operation ${this.a} + ${this.b} = ${super.exec()}'
+    }
+}
