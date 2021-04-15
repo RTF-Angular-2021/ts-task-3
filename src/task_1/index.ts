@@ -27,6 +27,7 @@ class Calculator {
     }
 }
 
+
 class DecorateRu extends Calculator
 {
     public exec(): string

@@ -21,4 +21,3 @@ function check_mail(target: object, propertyKey: string | symbol): any{
 
     }
 }
-
