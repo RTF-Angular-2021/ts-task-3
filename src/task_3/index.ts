@@ -12,28 +12,54 @@
 abstract class Control<T> {
     public name: string = "";
 
-    protected value: T;
+    protected abstract value: T | undefined;
     /**взять значение из контрола */
-    public abstract getValue(): T;
+    public abstract getValue(): T | undefined;
     /**установить значение в контрол */
-    public abstract setValue(val: T): void;
+    public abstract setValue(value: T): void;
 }
 /**Класс описывает TextBox контрол */
 class TextBox extends Control<string> {
+    protected value: string  |undefined;
+
+    public getValue(): string | undefined {
+        return this.value;
+    }
+    public setValue(value: string): void {
+        this.value = value;
+    }
 }
 /**value контрола selectBox */
 class SelectItem {
-    public value: string;
-    public id: number;
+    public value: string | undefined;
+    public id: number | undefined;
+
+    constructor (value?: string, id?: number){
+        this.value = value;
+        this.id = id;
+    }
 }
 
 /**Класс описывает SelectBox контрол */
 class SelectBox extends Control<SelectItem> {
+    protected value: SelectItem | undefined;
+
+    public getValue(): SelectItem | undefined {
+        return this.value;
+    }
+    public setValue(value: SelectItem): void {
+        this.value = value;
+    }
 }
 
 class Container {
     public instance: Control<any>;
-    public type: string;
+    public type: string|undefined;
+
+    constructor(instance: Control<any>, type: string){
+        this.instance = instance;
+        this.type = type;
+    }
 }
 
 /**Фабрика которая отвечает за создание экземпляров контролов */
@@ -45,10 +71,15 @@ class FactoryControl {
         this._collection = [];
     }
 
-    public register<?>(type: ?) {
+    public register<T extends Control<any>>(type: new () => T): void {      
+        const instanceType: string = (type as Function).name;
+        if (this.existType(instanceType)) return;
+        this._collection.push(new Container(new type(), instanceType));
     }
 
-    public getInstance<?>(type: ?): ? {
+    public getInstance<T>(type: new () => Control<T>): Control<T> {
+        const instanceType = (type as Function).name;
+        return this._collection.filter(e => e.type === instanceType)[0].instance;
     }
 
     private existType(type: string) {
@@ -60,6 +91,5 @@ const factory = new FactoryControl();
 factory.register(SelectBox);
 
 const selectBoxInstance = factory.getInstance(SelectBox);
-
 selectBoxInstance.setValue("sdfsdf") // компилятор TS не пропускает
 selectBoxInstance.setValue(new SelectItem()) // компилятор TS пропускает
