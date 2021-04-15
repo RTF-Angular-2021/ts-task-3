@@ -21,8 +21,20 @@ class Calculator {
             this.b = b;
         }
     }
-	
+
     public exec(): string {
         return (this.a + this.b).toString();
+    }
+}
+
+class decorateRu extends Calculator {
+    public exec(): string {
+        return `результат сложения ${this.a} + ${this.b} = ${super.exec()}`
+    }
+}
+
+class decorateEn extends Calculator {
+    public exec(): string {
+        return `result of the addition operation ${this.a} + ${this.b} = ${super.exec()}`
     }
 }

@@ -8,27 +8,46 @@
 */
 
 class ValueExample1 {
-    public value: string;
-    public id: number;
-	public constructor(value?: string, id?: number) {
-		this.value = value;
-		this.id = id;
-	}
+    public value: string | undefined;
+    public id: number | undefined;
+    public constructor(value?: string, id?: number) {
+        this.value = value;
+        this.id = id;
+    }
 }
- 
+
 class ValueExample2 {
     public undefinedProp: undefined;
-    public booleanProp: boolean;
-	public constructor(undefinedProp?: undefined, booleanProp?: boolean) {
-		this.undefinedProp = undefinedProp;
-		this.booleanProp = booleanProp;
-	}
+    public booleanProp: boolean | undefined;
+    public constructor(undefinedProp?: undefined, booleanProp?: boolean) {
+        this.undefinedProp = undefinedProp;
+        this.booleanProp = booleanProp;
+    }
 }
 
 class Example {
     @validate(ValueExample1, "id")
     public propValueExample1: any;
- 
+
     @validate(ValueExample2, "booleanProp")
     public propValueExample2: any;
+}
+
+function validate<TFunction>(type: TFunction, property: string) {
+    return (target: Object, propertyKey: string) => {
+        let propertyValue: TFunction;
+        let descriptor: PropertyDescriptor = {
+            get: function () {
+                return propertyValue;
+            },
+            set: function (newValue: TFunction) {
+                if (property in newValue) {
+                    propertyValue = newValue;
+                } else {
+                    throw new Error("Invalid Value");
+                }
+            }
+        }
+        Object.defineProperty(target, propertyKey, descriptor);
+    }
 }
