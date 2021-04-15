@@ -32,3 +32,28 @@ class Example {
     @validate(ValueExample2, "booleanProp")
     public propValueExample2: any;
 }
+
+function validate<T>(type: T, prop: string) {
+    return (target: Object, propertyKey: string | symbol) : any => {
+        let property: T;
+        let descriptor: PropertyDescriptor = {
+            get() {
+                return property;
+            },
+            set(value: T) {
+                if (!(prop in value)) {
+                    throw `value does not contain prop ${prop}`
+                }
+
+                property = value;
+            }
+        }
+
+        return descriptor;
+    }
+}
+
+let ex = new Example;
+
+ex.propValueExample1 = {}; // вызовет ошибку
+ex.propValueExample1 = {id: 1}; // не вызовет ошибку
