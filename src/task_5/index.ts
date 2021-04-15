@@ -15,7 +15,7 @@ class ValueExample1 {
 		this.id = id;
 	}
 }
- 
+
 class ValueExample2 {
     public undefinedProp: undefined;
     public booleanProp: boolean;
@@ -25,10 +25,25 @@ class ValueExample2 {
 	}
 }
 
+function validate<T>(type: T, prop: string){
+    return (target: Object, propertyKey: string | symbol):any => {
+        return {
+            set(value: any){
+                if(getType(value) !== (type as Function).name)
+                    throw new Error("incorrect type");
+                else if(!value[prop])
+                    throw new Error(`no property ${String(prop)}`);
+            }
+        }
+    }
+}
+
+const getType = (obj: Object): string => obj.hasOwnProperty('id') ? "ValueExample1" : "ValueExample2";
+
 class Example {
     @validate(ValueExample1, "id")
     public propValueExample1: any;
- 
+
     @validate(ValueExample2, "booleanProp")
     public propValueExample2: any;
 }

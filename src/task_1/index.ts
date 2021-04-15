@@ -8,7 +8,25 @@
  *			 результат в виде строки на английском языке:
  *			 result of the addition operation ${a} + ${b} = ${рассчитанное значение}
 */
+function decorateRu(constructor: Function):any{
+    Object.defineProperty(constructor.prototype, 'exec',{
+        value: function(): string{
+            return `результат сложения ${this.a} + ${this.b} = ${this.a + this.b}`;
+        },
+        writable: false 
+    })
+}
 
+function decorateEn(constructor: Function):any{
+    Object.defineProperty(constructor.prototype, 'exec',{
+        value: function(): string{
+            return `result of the addition operation ${this.a} + ${this.b} = ${this.a + this.b}`;
+        },
+        writable: false 
+    })
+}
+
+@decorateEn
 class Calculator {
     protected a: number = 0;
     protected b: number = 0;
