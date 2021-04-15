@@ -7,6 +7,36 @@
  * 		   Если поле не заполнено, то генерируется эксепшен.
 */
 
+function validate<T>(type: T, value: string) {
+    return function validate(target: Object, propertyName: string) {
+        let propertyValue: T;
+ 
+        let descriptor: PropertyDescriptor = {
+            get() {
+                return propertyValue;
+            }, 
+            set(newVal: T) {
+                if (newVal === type) {
+                    console.log('valid type');
+                    propertyValue = newVal;
+                } else {
+                    throw 'exception';
+                }
+                if (!propertyName[value]) {
+                    throw 'field is empty';
+                }
+                return propertyValue;
+            }
+        }
+
+        Object.defineProperty(target, propertyName, {
+            get: descriptor.get,
+            set: descriptor.set
+        });    
+
+    }
+}
+
 class ValueExample1 {
     public value: string;
     public id: number;
@@ -31,4 +61,13 @@ class Example {
  
     @validate(ValueExample2, "booleanProp")
     public propValueExample2: any;
+
+    constructor (propValueExample1: any, propValueExample2: any) {
+        this.propValueExample1 = propValueExample1;
+        this.propValueExample2 = propValueExample2;
+    }
 }
+
+const example = new Example(ValueExample1, ValueExample2);
+const e1 = new ValueExample1("21", 21);
+const e2 = new ValueExample2();
