@@ -20,6 +20,12 @@ abstract class Control<T> {
 }
 /**Класс описывает TextBox контрол */
 class TextBox extends Control<string> {
+    getValue(): string {
+        return "";
+    }
+
+    setValue(val: string): void {
+    }
 }
 /**value контрола selectBox */
 class SelectItem {
@@ -29,6 +35,12 @@ class SelectItem {
 
 /**Класс описывает SelectBox контрол */
 class SelectBox extends Control<SelectItem> {
+    getValue(): SelectItem {
+        return undefined;
+    }
+
+    setValue(val: SelectItem): void {
+    }
 }
 
 class Container {
@@ -45,10 +57,13 @@ class FactoryControl {
         this._collection = [];
     }
 
-    public register<?>(type: ?) {
+    public register<T extends Control<any>>(type: new () => T) {
+
     }
 
-    public getInstance<?>(type: ?): ? {
+    public getInstance<T>(type: new () => Control<T>): Control<T> {
+        const instanceType = type.toString()
+        return this._collection.find(control => control.type === instanceType);
     }
 
     private existType(type: string) {
@@ -61,5 +76,5 @@ factory.register(SelectBox);
 
 const selectBoxInstance = factory.getInstance(SelectBox);
 
-selectBoxInstance.setValue("sdfsdf") // компилятор TS не пропускает
+//selectBoxInstance.setValue("sdfsdf") // компилятор TS не пропускает
 selectBoxInstance.setValue(new SelectItem()) // компилятор TS пропускает

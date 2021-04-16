@@ -26,3 +26,26 @@ class Calculator {
         return (this.a + this.b).toString();
     }
 }
+
+class DecorateRu extends Calculator
+{
+    public exec(): string
+    {
+        return `Результат сложения ${this.a} + ${this.b} = ${super.exec()}`;
+    }
+}
+
+class DecorateEn extends Calculator
+{
+    public exec(): string
+    {
+        return `Result of the addition operation ${this.a} + ${this.b} = ${super.exec()}`;
+    }
+}
+
+//Test region
+
+let q = new Calculator(15, 78);
+let ruCalc = new DecorateRu(15,78);
+let enCalc = new DecorateEn(15,78);
+console.log(`${q.exec()} \n ${enCalc.exec()} \n ${ruCalc.exec()}`)

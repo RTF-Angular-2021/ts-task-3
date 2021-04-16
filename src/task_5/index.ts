@@ -7,6 +7,22 @@
  * 		   Если поле не заполнено, то генерируется эксепшен.
 */
 
+function validate<T>(type: T, prop: string) {
+    return (target: Object, propertyKey: string | symbol) : any => {
+        let property: T;
+        let descriptor: PropertyDescriptor = {
+            set(value: T) {
+                if (!(prop in value)) {
+                    throw `${prop} not exist in value`
+                }
+                property = value;
+            }
+        }
+
+        return descriptor;
+    }
+}
+
 class ValueExample1 {
     public value: string;
     public id: number;
