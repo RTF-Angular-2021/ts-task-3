@@ -6,11 +6,26 @@
  * 		2) Проверять у передаваемого объекта наличие заполненного поля.
  * 		   Если поле не заполнено, то генерируется эксепшен.
 */
+function validate(target: Object, propKey: string): any {
+    if (!(propKey in Object.keys(target) && (target as any)[propKey])) {
+        throw Error('invalid');
+    }
+    const descriptor: PropertyDescriptor = {
+        set: function(value: any) {
+            if (typeof value === typeof target){
+                this.value = value;
+            } else {
+                throw Error('invalid value');
+            }
+        }
+    }
+    return descriptor;
+}
 
 class ValueExample1 {
     public value: string;
     public id: number;
-	public constructor(value?: string, id?: number) {
+	public constructor(value: string = '', id: number = 0) {
 		this.value = value;
 		this.id = id;
 	}
@@ -19,16 +34,17 @@ class ValueExample1 {
 class ValueExample2 {
     public undefinedProp: undefined;
     public booleanProp: boolean;
-	public constructor(undefinedProp?: undefined, booleanProp?: boolean) {
+	public constructor(undefinedProp?: undefined, booleanProp: boolean = false) {
 		this.undefinedProp = undefinedProp;
 		this.booleanProp = booleanProp;
 	}
 }
 
-class Example {
+class Example1 {
     @validate(ValueExample1, "id")
     public propValueExample1: any;
  
     @validate(ValueExample2, "booleanProp")
     public propValueExample2: any;
 }
+ 
