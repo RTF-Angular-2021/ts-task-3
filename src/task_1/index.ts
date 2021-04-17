@@ -9,6 +9,25 @@
  *			 result of the addition operation ${a} + ${b} = ${рассчитанное значение}
 */
 
+function DecorateRu(target: Object, method: string, descriptor: PropertyDescriptor) {
+    let exec = descriptor.value;
+    descriptor.value = function(...args: any) {
+        let returnValue = exec.apply(this, args);
+        console.log(`результат сложения ${this.a} + ${this.b} = ${returnValue}`)
+        return returnValue;
+    }
+}
+
+function DecorateEn(target: Object, method: string, descriptor: PropertyDescriptor) {
+    let exec = descriptor.value;
+    descriptor.value = function(...args: any) {
+        let returnValue = exec.apply(this, args);
+        console.log(`result of the addition operation ${this.a} + ${this.b} = ${returnValue}`)
+        return returnValue;
+    }
+    
+}
+
 class Calculator {
     protected a: number = 0;
     protected b: number = 0;
@@ -22,7 +41,13 @@ class Calculator {
         }
     }
 	
+    @DecorateEn
+    @DecorateRu
     public exec(): string {
         return (this.a + this.b).toString();
     }
 }
+
+const test = new Calculator(10, 20);
+test.exec();
+
