@@ -4,8 +4,21 @@
  * Когда присваивается корректный e-mail в консоль выводится сообщение email valid.
  * Когда присваивается некорректный e-mail возбуждается ошибка.
 */
-
+function decorEmail(target: object, propertyKey: string): any {
+    let regExp = /[a-z]+@[a-z]+\.[a-z]+/gi;
+    let property: PropertyDescriptor = {
+        set: (value: string) => {
+            if (regExp.test(value)) {
+                console.log("e-mail valid");
+            } else {
+                console.log("Error");
+            }
+        }
+    };
+    return property;
+}
 class Example {
+    @decorEmail
     public email: string = "";
 }
 
