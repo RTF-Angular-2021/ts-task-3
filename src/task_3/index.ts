@@ -76,8 +76,8 @@ class FactoryControl {
 
     public getInstance<R>(type: new () => Control<R>): Control<R> {
         const typeInst: Control<R> = new type();
-        const instance = this._collection.filter(element => element.type === typeInst)[0].instance
-        return instance;
+        const instance = this._collection.filter(element => element.type === typeInst.name);
+        return instance[0].instance;
     }
 
     private existType(type: string) {
