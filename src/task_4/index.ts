@@ -6,6 +6,11 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     return obj[key];
 }
 
-const x = undefined;
-
+class C {
+    public m: string;
+    constructor(){
+        this.m = "hello";
+    }
+}
+let x = new C();
 console.log(getProperty(x, "m")); 

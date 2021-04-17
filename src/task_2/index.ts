@@ -4,8 +4,28 @@
  * Когда присваивается корректный e-mail в консоль выводится сообщение email valid.
  * Когда присваивается некорректный e-mail возбуждается ошибка.
 */
+function emailCheck(target: Object, propertyKey: string): any {
+    let email = "";
+    let descriptor: PropertyDescriptor = {
+        get: function(){
+            return email;
+        },
+        set: function(newEmail: string) {
+            let reg = /\w*@[a-z]+\.[a-z]{2,}/;
+            if (reg.test(newEmail)){
+                email = newEmail;
+                console.log("email valid")
+            }
+            else{
+                throw new Error();
+            }
+        }
+    };
+    return descriptor;
+}
 
 class Example {
+    @emailCheck
     public email: string = "";
 }
 
