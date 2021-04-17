@@ -4,8 +4,20 @@
  * Когда присваивается корректный e-mail в консоль выводится сообщение email valid.
  * Когда присваивается некорректный e-mail возбуждается ошибка.
 */
+function validDecorator(target: Object, propertyKey: string):any{
+    let descriptor:PropertyDescriptor = {
+        set(email : string) {
+            if (email.match(/^([\w.*-]+@([\w-]+\.)+[\w-]{2,4})?$/g)){
+                console.log("email valid");
+            }
+            else throw "Invalid"
+        }
+    }
+    return descriptor;
+}
 
-class Example {
+class Example{
+    @validDecorator
     public email: string = "";
 }
 
