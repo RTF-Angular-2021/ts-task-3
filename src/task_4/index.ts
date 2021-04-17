@@ -6,6 +6,6 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     return obj[key];
 }
 
-const x = undefined;
+const x = { "year": 2016 };
 
-console.log(getProperty(x, "m")); 
+console.log(getProperty(x, "year")); 
