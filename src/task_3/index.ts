@@ -30,11 +30,11 @@ class TextBox extends Control<string> {
     }
 
     public getValue(): string {
-        return this.name;
+        return this.value;
     }
     public setValue(val: string): void {
         if (val) {
-            this.name = val;
+            this.value = val;
         }
     }
 }
@@ -80,14 +80,14 @@ class FactoryControl {
         this._collection = [];
     }
 
-    public register(type: Function) {
+    public register<T extends Control<any>>(type: new () => T) {
         const typeStr = type.name;
         if (!this.existType(typeStr)) {
-            this._collection.push(new Container(type(), typeStr))
+            this._collection.push(new Container(new type(), typeStr))
         }
     }
 
-    public getInstance(type: Function): Control<any> {
+    public getInstance<T>(type: new () => Control<T>): Control<T> {
         const typeStr = type.name;
         const container = this._collection.find(x => x.type === typeStr);
         if (container){
@@ -105,7 +105,7 @@ class FactoryControl {
 const factory = new FactoryControl();
 factory.register(SelectBox);
 
-const selectBoxInstance = <SelectBox>factory.getInstance(SelectBox);
+const selectBoxInstance = factory.getInstance(SelectBox);
 
-//selectBoxInstance.setValue("sdfsdf") // компилятор TS не пропускает
+selectBoxInstance.setValue("sdfsdf") // компилятор TS не пропускает
 selectBoxInstance.setValue(new SelectItem()) // компилятор TS пропускает
