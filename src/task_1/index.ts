@@ -26,3 +26,27 @@ class Calculator {
         return (this.a + this.b).toString();
     }
 }
+
+class BaseDecorator extends Calculator {
+    protected wrappee: Calculator;
+
+    constructor(a: number, b: number) {
+        super(a, b);
+        this.wrappee = new Calculator(a, b);
+    }
+}
+
+class DecorateRu extends BaseDecorator{
+    public exec(): string {
+        return `результат сложения ${this.a} + ${this.b} = ${this.wrappee.exec()}`;
+    }
+}
+
+class DecorateEn extends BaseDecorator{
+    public exec(): string {
+        return `result of the addition operation ${this.a} + ${this.b} = ${this.wrappee.exec()}`;
+    }
+}
+
+const tmp = new DecorateRu(1, 3);
+console.log(tmp.exec());
