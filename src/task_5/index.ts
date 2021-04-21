@@ -33,14 +33,18 @@ class Example {
     public propValueExample2: any;
 }
 
-function validate<TFunction>(type: TFunction, property: string) {
-    return (target: Object, propertyKey: string) => {
+function validate<TFunction>(type: new () => TFunction, property: string) {
+    return (target: Object, propertyKey: string | symbol): any => {
         let propertyValue: TFunction;
         let descriptor: PropertyDescriptor = {
             get: function () {
                 return propertyValue;
             },
             set: function (newValue: TFunction) {
+                if (!(newValue instanceof type)) {
+                    throw new Error("Invalid Type")
+                }
+
                 if (property in newValue) {
                     propertyValue = newValue;
                 } else {
@@ -48,6 +52,6 @@ function validate<TFunction>(type: TFunction, property: string) {
                 }
             }
         }
-        Object.defineProperty(target, propertyKey, descriptor);
+        return descriptor;
     }
 }

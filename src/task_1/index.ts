@@ -27,14 +27,23 @@ class Calculator {
     }
 }
 
-class decorateRu extends Calculator {
-    public exec(): string {
-        return `результат сложения ${this.a} + ${this.b} = ${super.exec()}`
+class Decorator extends Calculator {
+    protected calculator: Calculator;
+
+    constructor(a: number, b: number) {
+        super(a, b);
+        this.calculator = new Calculator(a, b);
     }
 }
 
-class decorateEn extends Calculator {
+class DecorateRu extends Decorator {
     public exec(): string {
-        return `result of the addition operation ${this.a} + ${this.b} = ${super.exec()}`
+        return `результат сложения ${this.a} + ${this.b} = ${this.calculator.exec()}`
+    }
+}
+
+class decorateEn extends Decorator {
+    public exec(): string {
+        return `result of the addition operation ${this.a} + ${this.b} = ${this.calculator.exec()}`
     }
 }

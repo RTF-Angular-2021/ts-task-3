@@ -5,21 +5,21 @@
  * Когда присваивается некорректный e-mail возбуждается ошибка.
 */
 
-function emailDecorator(target: Object, propertyKey: string): any {
-    let email: string;
+function emailDecorator(target: Object, propertyKey: string | symbol): any {
+    let email: string = "";
     let descriptor: PropertyDescriptor = {
         get: function () {
             return email;
         },
         set: function (newEmail: string) {
-            if (newEmail.match(/[\w.-]+@[\w]+\.[\w]+/)) {
+            if (newEmail.match(/[\w.-]+@[\w]+\.[\w]+/) && newEmail != email) {
                 email = newEmail;
                 console.log("Email Valid");
             }
             throw new Error("Invalid Email");
         }
     }
-    Object.defineProperty(target, propertyKey, descriptor);
+    return descriptor;
 }
 
 class Example {
