@@ -12,28 +12,44 @@
 abstract class Control<T> {
     public name: string = "";
 
-    protected value: T;
+    protected value: T | undefined;
     /**взять значение из контрола */
-    public abstract getValue(): T;
+    public abstract getValue(): T | undefined;
     /**установить значение в контрол */
     public abstract setValue(val: T): void;
 }
 /**Класс описывает TextBox контрол */
 class TextBox extends Control<string> {
+    protected value: string | undefined;
+
+    public getValue(): string | undefined {
+        return this.value;
+    }
+    public setValue(val: string): void {
+        this.value = val;
+    }
 }
 /**value контрола selectBox */
 class SelectItem {
-    public value: string;
-    public id: number;
+    public value: string | undefined;
+    public id: number | undefined;
 }
 
 /**Класс описывает SelectBox контрол */
 class SelectBox extends Control<SelectItem> {
+    protected value: SelectItem | undefined;
+
+    public getValue(): SelectItem | undefined {
+        return this.value;
+    }
+    public setValue(val: SelectItem): void {
+        this.value = val;
+    }
 }
 
 class Container {
-    public instance: Control<any>;
-    public type: string;
+    public instance!: Control<any>;
+    public type: string | undefined;
 }
 
 /**Фабрика которая отвечает за создание экземпляров контролов */
@@ -45,10 +61,29 @@ class FactoryControl {
         this._collection = [];
     }
 
-    public register<?>(type: ?) {
+    public register<T extends Control<any>>(type: new () => T): void {
+        const typeInstance: T = new type();
+
+        if (!(typeInstance instanceof Control)) {
+            throw new Error("Invalid type");
+        }
+
+        if (this.existType(typeInstance.name)) {
+            throw new Error("Already exists")
+        }
+
+        this._collection.push({ instance: typeInstance, type: typeInstance.name });
     }
 
-    public getInstance<?>(type: ?): ? {
+    public getInstance<T>(type: new () => Control<T>): Control<T> {
+        const typeInstance: Control<T> = new type();
+
+        const instances = this._collection.filter(g => g.type === typeInstance.name);
+        if (instances.length > 0) {
+            return instances[0].instance;
+        }
+
+        throw Error("Instance not found");
     }
 
     private existType(type: string) {
