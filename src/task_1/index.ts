@@ -27,7 +27,16 @@ class Calculator {
     }
 }
 
-class DecorateRu extends Calculator
+class BaseDecorator extends Calculator{
+    protected _mth:Calculator;
+
+    constructor(a:number, b:number) {
+        super(a,b);
+        this._mth = new Calculator(a,b);
+    }
+}
+
+class DecorateRu extends BaseDecorator
 {
     public exec(): string
     {
@@ -35,7 +44,7 @@ class DecorateRu extends Calculator
     }
 }
 
-class DecorateEn extends Calculator
+class DecorateEn extends BaseDecorator
 {
     public exec(): string
     {

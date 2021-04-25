@@ -63,7 +63,7 @@ class FactoryControl {
 
     public getInstance<T>(type: new () => Control<T>): Control<T> {
         const instanceType = type.toString()
-        return this._collection.find(control => control.type === instanceType);
+        return this._collection.find(control => control.type === instanceType).instance;
     }
 
     private existType(type: string) {
