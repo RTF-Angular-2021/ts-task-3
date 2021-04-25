@@ -26,3 +26,29 @@ class Calculator {
         return (this.a + this.b).toString();
     }
 }
+
+class Decor extends Calculator
+{
+    protected calculators: Calculator;
+    constructor(a: number, b: number)
+    {
+        super(a, b)
+        this.calculators = new Calculator(a, b)
+    }
+}
+
+class DecorateRu extends Decor
+{
+    public exec(): string
+    {
+        return 'Результат сложения ${this.a} + ${this.b} = ${this.calculators.exec()}'
+    }
+}
+
+class DecorateEn extends Decor
+{
+    public exec(): string
+    {
+        return 'Result of the addition operation ${this.a} + ${this.b} = ${this.calculators.exec()}'
+    }
+}

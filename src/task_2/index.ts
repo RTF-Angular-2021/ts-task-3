@@ -5,10 +5,28 @@
  * Когда присваивается некорректный e-mail возбуждается ошибка.
 */
 
-class Example {
-    public email: string = "";
+function check_mail(target: Object, propertyKey: string): any{
+    let email = "";
+    let discriptor: PropertyDescriptor = {
+        get: function()
+        {
+            return email;
+        },
+        set: function(newmail: string)
+        {
+            let mail_write = /[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-zA-Z0-9]+/
+            if (mail_write.test(newmail))
+            {
+                email = newmail; 
+                console.log('email valid')  
+                
+            }
+            else
+            {
+                throw "Invalid email"  
+            }       
+        }
+    }
+    return discriptor;
 }
 
-let exampleInstance = new Example();
-exampleInstance.email = "fkkldfjg"; // генерирует эксепшен
-exampleInstance.email = "misha@mail.ru"; // выводит в консоль e-mail valid
