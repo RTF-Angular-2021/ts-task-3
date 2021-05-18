@@ -9,7 +9,11 @@
  *			 result of the addition operation ${a} + ${b} = ${рассчитанное значение}
 */
 
-class Calculator {
+interface ICalculator {
+    exec(): string;
+}
+
+class Calculator implements ICalculator{
     protected a: number = 0;
     protected b: number = 0;
 
@@ -27,20 +31,19 @@ class Calculator {
     }
 }
 
-class BaseDecorator extends Calculator{
-    protected _mth:Calculator;
-
-    constructor(a:number, b:number) {
-        super(a,b);
-        this._mth = new Calculator(a,b);
-    }
-}
-
-class DecorateRu extends BaseDecorator
+class BaseDecorator implements ICalculator
 {
+    protected calculator: ICalculator
+    protected a: number = 0;
+    protected b: number = 0;
+
+    constructor(calc: ICalculator) {
+        this.calculator = calc;
+    }
+
     public exec(): string
     {
-        return `Результат сложения ${this.a} + ${this.b} = ${super.exec()}`;
+        return this.calculator.exec();
     }
 }
 
@@ -48,13 +51,21 @@ class DecorateEn extends BaseDecorator
 {
     public exec(): string
     {
-        return `Result of the addition operation ${this.a} + ${this.b} = ${super.exec()}`;
+        return `Result of the addition operation ${super.exec()}`;
+    }
+}
+
+class DecorateRu extends BaseDecorator
+{
+    public exec(): string
+    {
+        return `Результат сложения ${super.exec()}`;
     }
 }
 
 //Test region
 
 let q = new Calculator(15, 78);
-let ruCalc = new DecorateRu(15,78);
-let enCalc = new DecorateEn(15,78);
+let ruCalc = new DecorateRu(q);
+let enCalc = new DecorateEn(q);
 console.log(`${q.exec()} \n ${enCalc.exec()} \n ${ruCalc.exec()}`)
