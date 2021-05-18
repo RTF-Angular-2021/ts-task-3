@@ -9,7 +9,11 @@
  *			 result of the addition operation ${a} + ${b} = ${рассчитанное значение}
 */
 
-class Calculator {
+interface ICalculator {
+    exec(): string;
+}
+
+class Calculator implements ICalculator{
     protected a: number = 0;
     protected b: number = 0;
 
@@ -26,3 +30,42 @@ class Calculator {
         return (this.a + this.b).toString();
     }
 }
+
+class BaseDecorator implements ICalculator
+{
+    protected calculator: ICalculator
+    protected a: number = 0;
+    protected b: number = 0;
+
+    constructor(calc: ICalculator) {
+        this.calculator = calc;
+    }
+
+    public exec(): string
+    {
+        return this.calculator.exec();
+    }
+}
+
+class DecorateEn extends BaseDecorator
+{
+    public exec(): string
+    {
+        return `Result of the addition operation ${super.exec()}`;
+    }
+}
+
+class DecorateRu extends BaseDecorator
+{
+    public exec(): string
+    {
+        return `Результат сложения ${super.exec()}`;
+    }
+}
+
+//Test region
+
+let q = new Calculator(15, 78);
+let ruCalc = new DecorateRu(q);
+let enCalc = new DecorateEn(q);
+console.log(`${q.exec()} \n ${enCalc.exec()} \n ${ruCalc.exec()}`)
