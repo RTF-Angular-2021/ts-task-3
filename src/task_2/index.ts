@@ -1,11 +1,11 @@
 function isValidEmail(target: Object, propertyKey: string): any {
     let email: string;
     let descriptor: PropertyDescriptor = {
-        set(newEmail: string) {
-            if (!/[a-zA-Z0-9]+@[a-zA-Z]+.[a-zA-Z]+/.test(newEmail))
+        set(emailToCheck: string) {
+            if (!/[a-zA-Z0-9]+@[a-zA-Z]+.[a-zA-Z]+/.test(emailToCheck))
                 throw 'email is invalid'
             console.log('email is valid');
-            email = newEmail;
+            email = emailToCheck;
         }
     }
     return descriptor;
