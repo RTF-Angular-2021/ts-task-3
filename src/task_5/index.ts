@@ -6,6 +6,17 @@
  * 		2) Проверять у передаваемого объекта наличие заполненного поля.
  * 		   Если поле не заполнено, то генерируется эксепшен.
 */
+import 'reflect-metadata'
+
+function validate<T extends typeof ValueExample1 | typeof ValueExample2>(ValueExample: T, param: string) {
+    let newClass = new ValueExample1()
+   
+    return function(target: Object, propertyName: string) {
+        // to get the design type of the property from the object
+        var t = Reflect.getMetadata("design:type", target, propertyName);
+        console.log(`${propertyName} type: ${t.name}`); // name type: String       
+    }
+}
 
 class ValueExample1 {
     public value: string;
@@ -25,7 +36,7 @@ class ValueExample2 {
 	}
 }
 
-class Example {
+class Exampl {
     @validate(ValueExample1, "id")
     public propValueExample1: any;
  
