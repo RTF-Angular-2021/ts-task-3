@@ -7,75 +7,54 @@
  * Методы register и getInstance класса FactoryControl. Должны принимать и возвращать только те типы,
  * которые унаследованы от класса Control<T>.
 */
-
 /**Базовый класс для контролов */
-abstract class Control<T> {
-    public name: string = "";
-
-    protected value: T;
-    /**взять значение из контрола */
-    public abstract getValue(): T;
-    /**установить значение в контрол */
-    public abstract setValue(val: T): void;
+class Control {
+    constructor() {
+        this.name = "";
+    }
 }
 /**Класс описывает TextBox контрол */
-class TextBox extends Control<string> {
-    public getValue(): string {
-        return this.value
+class TextBox extends Control {
+    getValue() {
+        return this.value;
     }
-    public setValue(val: string): void {
-        this.value = val
+    setValue(val) {
+        this.value = val;
     }
 }
 /**value контрола selectBox */
 class SelectItem {
-    public value: string;
-    public id: number;
 }
-
 /**Класс описывает SelectBox контрол */
-class SelectBox extends Control<SelectItem> {
-    public getValue(): SelectItem {
-        return this.value
+class SelectBox extends Control {
+    getValue() {
+        return this.value;
     }
-    public setValue(val: SelectItem): void {
-        this.value = val 
+    setValue(val) {
+        this.value = val;
     }
 }
-
 class Container {
-    public instance: Control<any>;
-    public type: string;
 }
-
 /**Фабрика которая отвечает за создание экземпляров контролов */
 class FactoryControl {
-    /**Список соотношений тип - инстанс типа */
-    private _collection: Array<Container>;
-
     constructor() {
         this._collection = [];
     }
-
-    public register<T extends typeof SelectBox>(type: T) {
-        if(!this.existType(typeof type)) {
-            this._collection.push({instance: type, type: typeof type})
+    register(type) {
+        if (!this.existType(typeof type)) {
+            this._collection.push({ instance: type, type: typeof type });
         }
     }
-
-    public getInstance<T extends typeof SelectBox>(type: T): Control<T> {
-        return this._collection.find(item => item.instance === type.prototype).instance
+    getInstance(type) {
+        return this._collection.find(item => item.instance === type.prototype).instance;
     }
-
-    private existType(type: string): boolean {
+    existType(type) {
         return this._collection.filter(g => g.type === type).length > 0;
     }
 }
-
 const factory = new FactoryControl();
 factory.register(SelectBox);
-
 const selectBoxInstance = factory.getInstance(SelectBox);
-
 // selectBoxInstance.setValue("sdfsdf") // компилятор TS не пропускает
 // selectBoxInstance.setValue(new SelectItem()) // компилятор TS пропускает

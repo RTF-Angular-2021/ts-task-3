@@ -9,6 +9,14 @@
  *			 result of the addition operation ${a} + ${b} = ${рассчитанное значение}
 */
 
+function DecorateRu(target: Object, method: string, descriptor: PropertyDescriptor) {
+    let originalMethod = descriptor.value;
+    descriptor.value = function(...args) {
+        let returnValue = originalMethod.apply(this, args)
+        return `результат сложения ${args[0]} + ${args[1]} = ${returnValue}`
+    }
+}
+
 class Calculator {
     protected a: number = 0;
     protected b: number = 0;
@@ -21,7 +29,8 @@ class Calculator {
             this.b = b;
         }
     }
-	
+  
+    @DecorateRu
     public exec(): string {
         return (this.a + this.b).toString();
     }

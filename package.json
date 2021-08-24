@@ -20,5 +20,7 @@
   "dependencies": {
     "tsc": "^1.20150623.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "reflect-metadata": "^0.1.13"
+  }
 }
